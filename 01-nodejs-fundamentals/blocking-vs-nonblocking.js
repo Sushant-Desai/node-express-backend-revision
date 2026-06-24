@@ -22,6 +22,8 @@ console.log("Finished")
 
 
 
+console.log(global);
 
 
+console.log(__dirname);
 
