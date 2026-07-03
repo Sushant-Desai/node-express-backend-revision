@@ -36,16 +36,86 @@ app.get("/contact", (req, res) => {
 })
 
 
-app.get("/user",(req,res)=>{
+app.get("/user", (req, res) => {
 
     //Combining status + json
     res.status(200).json({
-        success : true ,
-        data :{
-            id :1,
-            name :"Sushant Desai"
+        success: true,
+        data: {
+            id: 1,
+            name: "Sushant Desai"
         }
     });
 });
 
-app.listen(3000);
+// Query Parameter 
+
+app.get("/users", (req, res) => {
+    res.json(req.query)
+    console.log(req.query);
+
+})
+
+
+
+// Real Backend Example for query parameter
+app.get("/users/pagination", (req, res) => {
+    //   const page = req.query.page;
+    //   const limit = req.query.limit;
+
+    // we can convert in number
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    console.log(typeof page);
+    console.log(typeof limit);
+
+
+
+    res.json({
+        page,
+        limit
+    });
+});
+
+
+// Request Parameter 
+app.get("/user/:id", (req, res) => {
+
+    //Combining status + json
+    res.status(200).json({
+        success: true,
+        data: {
+            id: 1,
+            name: "Sushant Desai"
+        }
+    });
+});
+
+
+app.get("/users/:id", (req, res) => {
+    console.log("Checking the route parameters:", req.params);
+
+    res.send(
+        `User parameters are ${JSON.stringify(req.params)}\nID is ${req.params.id}`
+    );
+});
+
+
+// Product example
+app.get("/products/:id", (req, res) => {
+    const productId = req.params.id;
+
+    res.json({
+        success: true,
+        productId
+    });
+});
+
+
+
+
+app.listen(3000, () => {
+    console.log("server is running on port 3000");
+
+});
