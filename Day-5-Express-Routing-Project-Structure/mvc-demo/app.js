@@ -6,6 +6,8 @@ const userRoutes =require("./routes/userRoutes");
 
 app.use(express.json());
 
+app.use(express.static("public"));
+app.use("/uploads",express.static("uploads"))
 app.use("/",userRoutes);
 
 const PORT=3000;
