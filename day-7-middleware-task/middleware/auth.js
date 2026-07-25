@@ -1,13 +1,17 @@
 // Custom authentication middleware for learning purposes
 const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization');
+  const authHeader = req.header('Authorization');
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).json({
       success: false,
       message: 'Access denied. Please provide an Authorization header.'
     });
   }
+
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7).trim()
+    : authHeader.trim();
 
   // Demo tokens for learning
   if (token === 'secret-token') {
