@@ -1,29 +1,28 @@
-const express =require("express");
+import express from "express"
 
-const pool = require("./db");
+import { pool } from "./db.js"
 
+const app = express();
 
-const app=express();
-
-app.get("/",async (req,res)=>{
-    try{
-        const result= await pool.query("Select NOW()");
+app.get("/", async (req, res) => {
+    try {
+        const result = await pool.query("Select NOW()");
 
         res.json({
-            message:"Database Connected successfully",
-            time:result.rows[0].now,
+            message: "Database Connected successfully",
+            time: result.rows[0].now,
         });
 
-    }catch(error){
+    } catch (error) {
         console.log(error);
         res.json({
-            message:"Database Connection failed"
+            message: "Database Connection failed"
         });
     }
 });
 
 
-app.listen(3000,()=>{
+app.listen(3000, () => {
     console.log("Server is running on port 3000");
-    
+
 });
