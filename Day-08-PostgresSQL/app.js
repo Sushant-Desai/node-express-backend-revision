@@ -4,6 +4,8 @@ import { pool } from "./db.js"
 
 const app = express();
 
+app.use(express.json());
+
 app.get("/", async (req, res) => {
     try {
         const result = await pool.query("Select NOW()");
@@ -22,38 +24,57 @@ app.get("/", async (req, res) => {
 });
 
 // fetch all user route
-app.get("/users", async (req,res)=>{
+app.get("/users", async (req, res) => {
     try {
-        const result =await pool.query("Select * from users")
+        const result = await pool.query("Select * from users")
         res.status(200).json(result.rows)
     } catch (error) {
         console.log(error);
-        
+
         res.status(500).json({
-            message:"Failed to fetch users "
+            message: "Failed to fetch users "
         })
     }
 })
 
 // fetch one user 
-app.get("/users/:id",async(req,res)=>{
+app.get("/users/:id", async (req, res) => {
     try {
-        const { id }=req.params;
-        const result=await pool.query(
+        const { id } = req.params;
+        const result = await pool.query(
             "Select * from users where id =$1",
             [id]
         );
 
         res.status(200).json(result.rows)
-        
+
     } catch (error) {
         console.log(error);
-        
+
         res.status(500).json({
-            message:"Failed to fetch user"
+            message: "Failed to fetch user"
         })
-        
-        
+
+
+    }
+})
+
+// Add user 
+app.post("/users", async (req, res) => {
+    try {
+        const { name } = req.body
+
+        const result = await pool.query
+            (
+                "Insert into users (name) values ($1)  RETURNING *",
+                [name]
+            );
+
+        res.status(200).json(result.rows[0])
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 })
 
