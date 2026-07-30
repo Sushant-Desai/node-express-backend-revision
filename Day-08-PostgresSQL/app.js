@@ -21,6 +21,41 @@ app.get("/", async (req, res) => {
     }
 });
 
+// fetch all user route
+app.get("/users", async (req,res)=>{
+    try {
+        const result =await pool.query("Select * from users")
+        res.status(200).json(result.rows)
+    } catch (error) {
+        console.log(error);
+        
+        res.status(500).json({
+            message:"Failed to fetch users "
+        })
+    }
+})
+
+// fetch one user 
+app.get("/users/:id",async(req,res)=>{
+    try {
+        const { id }=req.params;
+        const result=await pool.query(
+            "Select * from users where id =$1",
+            [id]
+        );
+
+        res.status(200).json(result.rows)
+        
+    } catch (error) {
+        console.log(error);
+        
+        res.status(500).json({
+            message:"Failed to fetch user"
+        })
+        
+        
+    }
+})
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
